@@ -40,18 +40,19 @@ jobs:
         uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5 # v4.1.0
         with:
           buildkitd-flags: --debug
-      - name: 'Log in to DockerHub'
+      - name: 'Log in to GitHub Container Registry'
         if: github.event_name != 'pull_request'
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Apache variant metadata'
         id: metadata-apache
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0
         with:
           images: |
-            docker.io/martialblog/limesurvey
+            ghcr.io/${{ github.repository }}
           tags: |
             type=match,pattern=(.+),group=1
             type=match,pattern=^(\d+),group=1
@@ -72,7 +73,7 @@ jobs:
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0
         with:
           images: |
-            docker.io/martialblog/limesurvey
+            ghcr.io/${{ github.repository }}
           tags: |
             type=match,pattern=(.+),group=1
             type=match,pattern=^(\d+),group=1
@@ -93,7 +94,7 @@ jobs:
         uses: docker/metadata-action@80c7e94dd9b9319bd5eb7a0e0fe9291e23a2a2e9 # v6.1.0
         with:
           images: |
-            docker.io/martialblog/limesurvey
+            ghcr.io/${{ github.repository }}
           tags: |
             type=match,pattern=(.+),group=1
             type=match,pattern=^(\d+),group=1
